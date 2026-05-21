@@ -1,0 +1,26 @@
+# Local editor / agent state
+.claude/
+.vscode/
+.idea/
+
+# Python caches and virtual environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Local source images and generated outputs
+image/
+outputs/
+
+# External prompt corpus and downloaded reference assets
+awesome-gpt-image-2-prompts-main/
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
