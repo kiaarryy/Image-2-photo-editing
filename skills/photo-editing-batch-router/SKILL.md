@@ -7,11 +7,13 @@ description: Use when planning or running batch AI image editing for mixed trave
 
 ## Core Rule
 
-Route by photo intent first, not by creator name. Creator/blogger references are grounding signals only; write concrete photographic instructions and never ask for an exact living-person style clone.
+Route by photo intent first, then by social-media style archetype. Creator/blogger references are grounding signals only; write concrete photographic instructions and never ask for an exact living-person style clone.
+
+For full drop-folder execution, use `auto-photo-editing-pipeline` first. This router owns classification and prompt assembly logic.
 
 ## Batch Workflow
 
-1. Inventory the input folder and create a manifest with: `file`, `category`, `preserve`, `selected_skill`, `aspect_ratio`, `output_goal`, `prompt_status`.
+1. Inventory the input folder and create a manifest with: `file`, `visual_summary`, `category`, `selected_skill`, `style_archetype`, `preserve`, `aspect_ratio`, `output_goal`, `prompt_file`, `output_file`, `prompt_status`, `qa_status`.
 2. Classify each image into one primary route:
    - `photo-clean-retouch`: keep original composition, clean and improve.
    - `travel-lifestyle-portrait-editor`: travel, daily life, cafe, street, hotel, architecture, vacation portraits.
@@ -26,8 +28,9 @@ Route by photo intent first, not by creator name. Creator/blogger references are
 Use the uploaded image as the reference photo. Preserve the same person identity if visible, natural body proportions, pose direction, outfit identity, shoe design, logos/crests/text that already exist, and the original photo's believable physical structure. Improve lighting, composition, background cleanliness, color grade, texture, sharpness, and editorial finish while keeping the result photorealistic.
 ```
 
-5. Add route-specific prompt blocks from the selected skill.
-6. Add negatives for every image:
+5. Add a creator/social-media style archetype from `../auto-photo-editing-pipeline/references/style-archetypes.md`.
+6. Add route-specific prompt blocks from the selected skill.
+7. Add negatives for every image:
 
 ```text
 No extra limbs, no distorted hands or feet, no warped shoes, no changed logos or jersey crests, no fake unreadable text, no plastic skin, no over-smoothing, no cartoon, no anime, no watermark, no low-resolution artifacts.
@@ -44,6 +47,19 @@ No extra limbs, no distorted hands or feet, no warped shoes, no changed logos or
 | Outfit, jersey, leggings, socks, gym fit | `sportswear-fit-editor` | Athletic fashion campaign |
 | Sneakers/product detail | `sneaker-product-editor` | Commercial product hero |
 
+## Style Archetype Table
+
+| Desired social-media look | style_archetype |
+|---|---|
+| Natural polished cleanup | `creator-clean-retouch` |
+| Warm travel/lifestyle | `warm-travel-editorial` |
+| Cinematic city/social portrait | `cinematic-social-portrait` |
+| Fashion portrait retouch | `fashion-portrait-retouch` |
+| Sport action editorial | `sports-editorial-action` |
+| Sport outfit / streetwear fit | `streetwear-sports-fit` |
+| Sneaker product hero | `commercial-sneaker-hero` |
+| Graphic product campaign | `dynamic-product-campaign` |
+
 ## Quality Gate
 
 Before accepting a batch, check:
@@ -53,5 +69,6 @@ Before accepting a batch, check:
 - Whites keep texture; blacks do not crush important details.
 - Background cleanup does not invent unreadable signage.
 - The look is consistent inside each style group, not across all categories.
+- Final accepted outputs are copied into the project run `edited/` folder.
 
 Read `references/creator-source-notes.md` only when source grounding or style rationale is needed.
